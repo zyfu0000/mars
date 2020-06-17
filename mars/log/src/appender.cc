@@ -82,6 +82,7 @@ static Tss sg_tss_dumpfile(&free);
 
 static const unsigned int kBufferBlockLength = 150 * 1024;
 static const long kMinLogAliveTime = 24 * 60 * 60;    // 1 days in second
+static const long kMaxBufferSize = 128 * 1024;
 
 static Mutex sg_mutex_dir_attr;
 
@@ -143,7 +144,7 @@ void XloggerAppender::Write(const XLoggerInfo* _info, const char* _log) {
 
     if (2 <= (int)recursion.Get() && nullptr == s_recursion_str.get()) {
         if ((int)recursion.Get() > 10) return;
-        char* strrecursion = (char*)calloc(16 * 1024, 1);
+        char* strrecursion = (char*)calloc(kMaxBufferSize, 1);
         s_recursion_str.set((void*)(strrecursion));
 
         XLoggerInfo info = *_info;
@@ -152,7 +153,7 @@ void XloggerAppender::Write(const XLoggerInfo* _info, const char* _log) {
         char recursive_log[256] = {0};
         snprintf(recursive_log, sizeof(recursive_log), "ERROR!!! xlogger_appender Recursive calls!!!, count:%d", (int)recursion.Get());
 
-        PtrBuffer tmp(strrecursion, 0, 16*1024);
+        PtrBuffer tmp(strrecursion, 0, kMaxBufferSize);
         log_formater(&info, recursive_log, tmp);
 
         strncat(strrecursion, _log, 4096);
@@ -862,7 +863,7 @@ void XloggerAppender::__AsyncLogThread() {
 
 
 void XloggerAppender::__WriteSync(const XLoggerInfo* _info, const char* _log) {
-    char temp[16 * 1024] = {0};     // tell perry,ray if you want modify size.
+    char temp[kMaxBufferSize] = {0};     // tell perry,ray if you want modify size.
     PtrBuffer log(temp, 0, sizeof(temp));
     log_formater(_info, _log, log);
 
@@ -877,7 +878,7 @@ void XloggerAppender::__WriteAsync(const XLoggerInfo* _info, const char* _log) {
     ScopedLock lock(mutex_buffer_async_);
     if (nullptr == log_buff_) return;
 
-    char temp[16*1024] = {0};       //tell perry,ray if you want modify size.
+    char temp[kMaxBufferSize] = {0};       //tell perry,ray if you want modify size.
     PtrBuffer log_buff(temp, 0, sizeof(temp));
     log_formater(_info, _log, log_buff);
 
