@@ -39,6 +39,12 @@ typedef enum {
     kLevelNone,     // Special level used to disable all log messages.
 } TLogLevel;
 
+enum TAppenderMode
+{
+    kAppenderAsync,
+    kAppenderSync,
+};
+
 typedef struct XLoggerInfo_t {
     TLogLevel level;
     const char* tag;

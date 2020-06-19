@@ -25,16 +25,12 @@
 #include <vector>
 #include <stdint.h>
 
-#include "boost/iostreams/device/mapped_file.hpp"
+
 #include "mars/comm/xlogger/xloggerbase.h"
 #include "mars/comm/thread/thread.h"
 #include "mars/comm/thread/condition.h"
+#include "mars/boost/iostreams/device/mapped_file.hpp"
 
-enum TAppenderMode
-{
-    kAppenderAsync,
-    kAppenderSync,
-};
 
 void appender_open(TAppenderMode _mode, const char* _dir, const char* _nameprefix, const char* _pub_key);
 void appender_open_with_cache(TAppenderMode _mode, const std::string& _cachedir, const std::string& _logdir,

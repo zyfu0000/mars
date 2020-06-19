@@ -27,7 +27,7 @@ COMM_COPY_HEADER_FILES = {
     "mars/comm/xlogger/preprocessor.h": "xlog",
     "mars/comm/xlogger/xloggerbase.h": "xlog",
     "mars/comm/xlogger/xlogger.h": "xlog",
-    "mars/log/appender.h": "xlog",
+    # "mars/log/appender.h": "xlog",
     "mars/log/xlogger_interface.h": "xlog",
     "mars/app/app.h": "app",
     "mars/app/app_logic.h": "app",
@@ -64,7 +64,7 @@ XLOG_COPY_HEADER_FILES = {
     "mars/comm/xlogger/preprocessor.h": "xlog",
     "mars/comm/xlogger/xloggerbase.h": "xlog",
     "mars/comm/xlogger/xlogger.h": "xlog",
-    "mars/log/appender.h": "xlog",
+    # "mars/log/appender.h": "xlog",
     "mars/log/xlogger_interface.h": "xlog",
 }
 

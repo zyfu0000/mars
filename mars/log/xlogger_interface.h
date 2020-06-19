@@ -21,8 +21,9 @@
 #define MARS_LOG_XLOGGER_INTERFACE_H_
 
 #include <stdint.h>
+#include <string>
+#include <vector>
 
-#include "appender.h"
 #include "mars/comm/xlogger/xloggerbase.h"
 
 namespace mars {
@@ -64,6 +65,8 @@ void SetConsoleLogOpen(int64_t _instance_ptr, bool _is_open);
 void SetMaxFileSize(int64_t _instance_ptr, long _max_file_size);
 
 void SetMaxAliveTime(int64_t _instance_ptr, long _alive_seconds);
+
+bool Getfilepath_from_timespan(int64_t _instance_ptr, int _timespan, const char* _prefix, std::vector<std::string>& _filepath_vec);
 
 }
 }

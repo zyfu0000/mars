@@ -25,6 +25,7 @@
 #include "mars/comm/thread/mutex.h"
 #include "mars/comm/thread/lock.h"
 #include "mars/comm/xlogger/xlogger_category.h"
+#include "mars/log/appender.h"
 
 using namespace mars::comm;
 namespace mars {
@@ -210,6 +211,21 @@ void SetMaxAliveTime(int64_t _instance_ptr, long _alive_seconds) {
         XloggerCategory* category  = reinterpret_cast<XloggerCategory*>(_instance_ptr);
         XloggerAppender* appender = reinterpret_cast<XloggerAppender*>(category->GetAppender());
         return appender->SetMaxAliveDuration(_alive_seconds);
+    }
+}
+
+bool Getfilepath_from_timespan(int64_t _instance_ptr, int _timespan, const char* _prefix, std::vector<std::string>& _filepath_vec)
+{
+    if (_instance_ptr < 0) {
+        return false;
+    }
+
+    if (0 == _instance_ptr) {
+       return appender_getfilepath_from_timespan(_timespan, _prefix, _filepath_vec);
+    } else {
+        XloggerCategory* category  = reinterpret_cast<XloggerCategory*>(_instance_ptr);
+        XloggerAppender* appender = reinterpret_cast<XloggerAppender*>(category->GetAppender());
+        return appender->GetfilepathFromTimespan(_timespan, _prefix, _filepath_vec);
     }
 }
 
