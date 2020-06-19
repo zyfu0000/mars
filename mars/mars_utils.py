@@ -61,11 +61,11 @@ XLOG_COPY_HEADER_FILES = {
     "mars/comm/has_member.h": "comm",
     "mars/comm/objc/scope_autoreleasepool.h": "comm",
     "mars/comm/objc/ThreadOperationQueue.h": "comm",
-    "mars/comm/xlogger/preprocessor.h": "xlog",
-    "mars/comm/xlogger/xloggerbase.h": "xlog",
-    "mars/comm/xlogger/xlogger.h": "xlog",
+    "mars/comm/xlogger/preprocessor.h": "comm/xlogger",
+    "mars/comm/xlogger/xloggerbase.h": "comm/xlogger",
+    "mars/comm/xlogger/xlogger.h": "comm/xlogger",
     # "mars/log/appender.h": "xlog",
-    "mars/log/xlogger_interface.h": "xlog",
+    "mars/log/xlogger_interface.h": "comm/xlogger",
 }
 
 
