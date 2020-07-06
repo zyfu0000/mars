@@ -83,7 +83,8 @@ static Tss sg_tss_dumpfile(&free);
 
 static const unsigned int kBufferBlockLength = 150 * 1024;
 static const long kMinLogAliveTime = 24 * 60 * 60;    // 1 days in second
-static const long kMaxBufferSize = 128 * 1024;
+static const long kMaxBufferSize = 16 * 1024;         // old is 16k
+static const bool kIsCompress = false;                // old is true
 
 static Mutex sg_mutex_dir_attr;
 
@@ -281,11 +282,11 @@ void XloggerAppender::Open(TAppenderMode _mode, const char* _cachedir,
                 cache_logdir_.empty()?logdir_.c_str():cache_logdir_.c_str(), logfileprefix_.c_str());
     bool use_mmap = false;
     if (OpenMmapFile(mmap_file_path, kBufferBlockLength, mmap_file_))  {
-        log_buff_ = new LogBuffer(mmap_file_.data(), kBufferBlockLength, true, _pub_key);
+        log_buff_ = new LogBuffer(mmap_file_.data(), kBufferBlockLength, kIsCompress, _pub_key);
         use_mmap = true;
     } else {
         char* buffer = new char[kBufferBlockLength];
-        log_buff_ = new LogBuffer(buffer, kBufferBlockLength, true, _pub_key);
+        log_buff_ = new LogBuffer(buffer, kBufferBlockLength, kIsCompress, _pub_key);
         use_mmap = false;
     }
 
@@ -883,7 +884,7 @@ void XloggerAppender::__WriteAsync(const XLoggerInfo* _info, const char* _log) {
     PtrBuffer log_buff(temp, 0, sizeof(temp));
     log_formater(_info, _log, log_buff);
 
-    if (log_buff_->GetData().Length() >= kBufferBlockLength*4/5) {
+    if (log_buff_->GetData().Length() >= kBufferBlockLength*4/5) {//120k
        int ret = snprintf(temp, sizeof(temp), "[F][ sg_buffer_async.Length() >= BUFFER_BLOCK_LENTH*4/5, len: %d\n", (int)log_buff_->GetData().Length());
        log_buff.Length(ret, ret);
     }

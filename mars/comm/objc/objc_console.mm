@@ -34,7 +34,7 @@ void ConsoleLog(const XLoggerInfo* _info, const char* _log)
     const char* strFuncName  = NULL == _info->func_name ? "" : _info->func_name;
     const char* file_name = ExtractFileName(_info->filename);
 
-    char temp_time[64] = {0};
+    char temp_time[128] = {0};
 
     if (0 != _info->timeval.tv_sec) {
         time_t sec = _info->timeval.tv_sec;
