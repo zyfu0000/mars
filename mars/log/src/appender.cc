@@ -84,7 +84,7 @@ static Tss sg_tss_dumpfile(&free);
 static const unsigned int kBufferBlockLength = 150 * 1024;
 static const long kMinLogAliveTime = 24 * 60 * 60;    // 1 days in second
 static const long kMaxBufferSize = 16 * 1024;         // old is 16k
-static const bool kIsCompress = false;                // old is true
+static const bool kIsCompress = true;                // old is true
 
 static Mutex sg_mutex_dir_attr;
 

@@ -29,7 +29,7 @@
 class LogCrypt {
 public:
     LogCrypt(const char* _pubkey);
-    virtual ~LogCrypt() {}
+    virtual ~LogCrypt();
     
 private:
     LogCrypt(const LogCrypt&);

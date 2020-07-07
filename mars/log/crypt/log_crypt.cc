@@ -33,6 +33,8 @@
 #include "micro-ecc-master/uECC.h"
 #endif
 
+#include <map>
+
 static const char kMagicSyncStart = '\x06';
 static const char kMagicSyncNoCryptStart ='\x08';
 static const char kMagicAsyncStart ='\x07';
@@ -53,6 +55,37 @@ static void __TeaEncrypt (uint32_t* v, uint32_t* k) {
     }
     v[0]=v0; v[1]=v1;
 }
+
+
+static std::map<uint64_t, uint16_t> crypt_map;
+static uint16_t __GetSeq(bool _is_async, LogCrypt *cryptInstance) {
+    
+    if (!_is_async) {
+        return 0;
+    }
+
+    uint64_t key = (uint64_t)cryptInstance;
+    
+    auto it = crypt_map.find(key);
+    if (it != crypt_map.end()) {
+        uint16_t seq = it->second;
+
+        seq ++;
+
+        if (0 == seq){
+            seq ++;
+        }
+
+        it->second = seq;
+
+        return it->second;
+    }
+
+    crypt_map[key] = 0;
+    
+    return 0;
+}
+
 
 static uint16_t __GetSeq(bool _is_async) {
     
@@ -96,6 +129,19 @@ static bool Hex2Buffer(const char* _str, size_t _len, unsigned char* _buffer) {
     return true;
 }
 #endif
+
+
+LogCrypt::~LogCrypt(){
+
+    uint64_t key = (uint64_t)this;
+    
+    auto it = crypt_map.find(key);
+    if (it == crypt_map.end()) {
+        return;
+    }
+
+    crypt_map.erase(it);
+}
 
 LogCrypt::LogCrypt(const char* _pubkey): seq_(0), is_crypt_(false) {
     
@@ -203,7 +249,7 @@ void LogCrypt::SetHeaderInfo(char* _data, bool _is_async) {
         }
     }
     
-    seq_ = __GetSeq(_is_async);
+    seq_ = __GetSeq(_is_async, this);
     memcpy(_data + sizeof(kMagicAsyncStart), &seq_, sizeof(seq_));
 
     
